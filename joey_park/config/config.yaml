@@ -1,0 +1,71 @@
+# Joey Park U.S. Equity Investment Agent — runtime configuration
+# All weights/thresholds here are editable without touching code.
+
+scoring:
+  # Weighted combination of validated sub-scores -> Overall Score (0-1).
+  # Weights must sum to 1.0; the app validates this at startup.
+  weights:
+    fundamental: 0.20
+    growth: 0.15
+    quality: 0.15
+    valuation: 0.20
+    momentum: 0.10
+    cycle_position: 0.10   # L x (1-E) x P x T lens, carried from source docs
+    catalyst: 0.10
+  confidence:
+    # Confidence is evidence quality, kept separate from the score itself.
+    high_min_completeness: 0.85
+    medium_min_completeness: 0.55
+
+valuation:
+  methods_by_sector:
+    default: [pe_multiple, ev_ebitda, fcf_yield]
+    semiconductor: [pe_multiple, ev_ebitda, peg]
+    ai_software_cloud: [ev_revenue, fcf_yield, peg]
+    power_infrastructure: [ev_ebitda, fcf_yield]
+    financial: [pe_multiple, price_to_book]
+    consumer: [pe_multiple, ev_ebitda]
+    healthcare: [pe_multiple, ev_ebitda, peg]
+  peer_lookback_years: 5
+  # Heuristic anchors used when no live peer-comparison set is available
+  # (MVP limitation — see docs/DECISION_LOG.md and README "Limitations").
+  # These are reasonableness bands, not fair-value targets.
+  heuristics:
+    peg_cheap_below: 1.0
+    peg_expensive_above: 2.5
+    ev_ebitda_cheap_below: 10.0
+    ev_ebitda_expensive_above: 25.0
+    fcf_yield_good_above: 0.04
+    fcf_yield_poor_below: 0.01
+
+risk:
+  position_limits:
+    max_single_position_pct: 0.15
+    max_sector_pct: 0.35
+  macro_risk_types:
+    type_a: "Thesis-collapse: aggregate hyperscaler AI capex cut YoY"
+    type_b: "Internal reshuffling: yield-parity / in-house chip substitution margin compression"
+    type_c: "Self-erosion: rising credit spreads impair debt-funded capex"
+
+data:
+  price_staleness_days: 3
+  fundamentals_staleness_days: 100
+  min_data_completeness_pct: 0.6
+
+agents:
+  enabled:
+    data: true
+    fundamental: true
+    valuation: true
+    technical: true
+    macro: true
+    news: false        # flip to true once NEWS_API_KEY is configured
+    risk: true
+    research: true
+    critic: true
+    decision: true
+    portfolio: true
+
+alerts:
+  price_move_pct_1d: 0.05
+  score_change_threshold: 0.15

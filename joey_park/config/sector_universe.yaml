@@ -1,0 +1,62 @@
+# Sector membership + entry-filter description, ported from Source 3's
+# 6-sector business-model filter (see docs/SOURCE_COMPARISON.md).
+# This is a starting watchlist, not investment advice or a closed list —
+# edit freely. Tickers are NOT hardcoded into any scoring logic; this file
+# only seeds the default watchlist and lets the Fundamental/Valuation agents
+# pick a sector-appropriate method set (see config.yaml valuation section).
+
+semiconductor:
+  description: >
+    Process/lithography/packaging monopolies, HBM/DRAM, custom ASIC design
+    and supply chain for AI compute hardware.
+  risk_note: "Primary exposure: Type B (yield-parity / in-house chip substitution)"
+  # topology_weight: structural/monopoly-position lens carried from the
+  # source docs' "T" variable (docs/SOURCE_COMPARISON.md D1). This is a
+  # qualitative judgment call, not derivable from financial statements —
+  # edit it as your own view of the sector's structural position changes.
+  topology_weight: 0.45
+  tickers: [TSM, NVDA, AMD, AVGO, ASML, AMAT, LRCX, KLAC, MU, ARM, INTC, QCOM,
+            MRVL, ADI, TXN, NXPI, ON, MPWR, SWKS, QRVO, MKSI, IPGP, VSH, AMKR, COHR]
+
+ai_software_cloud:
+  description: >
+    Low/no-debt SaaS, data, and security platforms monetizing on top of
+    hyperscaler infrastructure.
+  risk_note: "Primary exposure: Type B (customer IT-cost optimization, hyperscaler feature in-housing)"
+  topology_weight: 0.65
+  tickers: [MSFT, GOOGL, ORCL, CRM, NOW, SNOW, PLTR, ADBE, CRWD, MDB, NET, DDOG,
+            PANW, TEAM, ZS, OKTA, HUBS, DT, WDAY, APP, INTU, SAP]
+
+power_infrastructure:
+  description: >
+    Data-center site/power procurement, grid interconnection, nuclear/SMR
+    contracts, cooling and electrical-equipment OEMs.
+  risk_note: "Primary exposure: Type C (debt-funded capex vs. rising credit spreads)"
+  topology_weight: 0.55
+  tickers: [CEG, VST, VRT, GEV, ETN, NEE, SO, D, SMR, OKLO, FLR, GE,
+            EQIX, DLR, AMT, CCI, SBAC, PH, EMR, CLS, NRG, AEP]
+
+crypto_fintech:
+  description: >
+    Digital payments, custody, and crypto-adjacent infrastructure.
+  risk_note: "Primary exposure: credit-spread widening and global dollar liquidity tightening"
+  topology_weight: 0.30
+  tickers: [COIN, MSTR, SOFI, HOOD, SQ, PYPL, V, MA, NU,
+            MARA, RIOT, AXP, DFS, SCHW, AFRM, UPST, IBKR]
+
+biotech_applied_ai:
+  description: >
+    In-silico drug discovery, quantum computing, robotics/autonomy —
+    disruptive AI applied to non-software industries.
+  risk_note: "Primary exposure: first-of-a-kind (FOAK) validation failure, pre-revenue cash burn"
+  topology_weight: 0.25
+  tickers: [ISRG, RXRX, CRSP, IONQ, RGTI, JOBY,
+            NTLA, BEAM, EDIT, AVAV, ACHR, ENPH, RUN, QS, NVO]
+
+value_anchors:
+  description: >
+    Low-leverage, cash-generative blue chips used as portfolio ballast.
+  risk_note: "Lowest cycle exposure; primarily macro/consumer-demand sensitivity"
+  topology_weight: 0.40
+  tickers: [BRK.B, JPM, COST, JNJ, XOM, KO,
+            WMT, PG, MCD, UNH, CVX, BAC]
