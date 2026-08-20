@@ -9,6 +9,7 @@ import logging
 from dataclasses import dataclass, field
 
 from joey_park.llm.base import LLMProvider
+from joey_park.llm.errors import describe
 from joey_park.llm.json_utils import LLMJsonParseError, extract_json
 
 logger = logging.getLogger(__name__)
@@ -84,14 +85,15 @@ class CriticAgent:
         try:
             response = self._llm.complete(system=_SYSTEM_PROMPT, prompt=prompt, max_tokens=3800)
         except Exception as exc:
-            logger.error("Critic agent LLM call failed for %s: %s", ticker, exc)
+            detail = describe(exc)
+            logger.error("Critic agent LLM call failed for %s: %s", ticker, detail)
             return CriticResult(
                 numbers_match_facts=False,
                 bull_only_bias_detected=False,
                 missing_bear_case=False,
                 valuation_assumptions_reasonable=False,
                 data_gaps_acknowledged=False,
-                issues=[f"Critic LLM call failed: {exc}"],
+                issues=[f"Critic LLM call failed: {detail}"],
                 verdict="NOT_RUN",
             )
         try:

@@ -12,6 +12,7 @@ import logging
 from dataclasses import dataclass
 
 from joey_park.llm.base import LLMProvider
+from joey_park.llm.errors import describe
 from joey_park.llm.json_utils import LLMJsonParseError, extract_json
 
 logger = logging.getLogger(__name__)
@@ -82,9 +83,10 @@ class ResearchAgent:
         try:
             response = self._llm.complete(system=_SYSTEM_PROMPT, prompt=prompt, max_tokens=4000)
         except Exception as exc:
-            logger.error("Research agent LLM call failed for %s: %s", ticker, exc)
+            detail = describe(exc)
+            logger.error("Research agent LLM call failed for %s: %s", ticker, detail)
             return ResearchResult(
-                business_summary=f"DATA_NOT_AVAILABLE (LLM call failed: {exc})",
+                business_summary=f"DATA_NOT_AVAILABLE (LLM call failed: {detail})",
                 growth_drivers=[],
                 quality_notes="DATA_NOT_AVAILABLE",
                 competitive_position="DATA_NOT_AVAILABLE",

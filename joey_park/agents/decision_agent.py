@@ -11,6 +11,7 @@ import logging
 from dataclasses import dataclass, field
 
 from joey_park.llm.base import LLMProvider
+from joey_park.llm.errors import describe
 from joey_park.llm.json_utils import LLMJsonParseError, extract_json
 
 logger = logging.getLogger(__name__)
@@ -116,12 +117,13 @@ class DecisionAgent:
         try:
             response = self._llm.complete(system=_SYSTEM_PROMPT, prompt=prompt, max_tokens=4500)
         except Exception as exc:
-            logger.error("Decision agent LLM call failed for %s: %s", ticker, exc)
+            detail = describe(exc)
+            logger.error("Decision agent LLM call failed for %s: %s", ticker, detail)
             return DecisionResult(
                 investment_view="Neutral",
                 confidence="Low",
                 time_horizon="Medium",
-                thesis=f"DATA_NOT_AVAILABLE (Decision agent LLM call failed: {exc})",
+                thesis=f"DATA_NOT_AVAILABLE (Decision agent LLM call failed: {detail})",
                 bull_case={"narrative": "DATA_NOT_AVAILABLE", "probability": 0.0},
                 base_case={"narrative": "DATA_NOT_AVAILABLE", "probability": 0.0},
                 bear_case={"narrative": "DATA_NOT_AVAILABLE", "probability": 0.0},
