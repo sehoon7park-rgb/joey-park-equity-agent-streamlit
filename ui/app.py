@@ -20,6 +20,16 @@ import json
 import sys
 from pathlib import Path
 
+# Some cloud hosts (e.g. Streamlit Community Cloud's minimal container) run
+# Python with a non-UTF-8 default stream encoding (bare/POSIX locale), which
+# raises UnicodeEncodeError the moment anything — our own logging, or a
+# dependency's internal debug logging — tries to write the Korean text this
+# app generates to stdout/stderr. Force UTF-8 before anything else runs, the
+# same fix already applied to joey_park/cli.py.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8")
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
