@@ -156,7 +156,9 @@ def _app():
 
 orchestrator, db, settings, portfolio_agent = _app()
 
-if not settings.is_llm_configured():
+if settings.anthropic_api_key_error:
+    st.error(settings.anthropic_api_key_error)
+elif not settings.is_llm_configured():
     st.warning(
         "ANTHROPIC_API_KEY가 .env에 설정되어 있지 않습니다 — Research/Critic/Decision 에이전트는 "
         "실제 투자의견 대신 '데이터 없음(DATA_NOT_AVAILABLE)'을 반환합니다. 정량 점수(재무/밸류에이션/"

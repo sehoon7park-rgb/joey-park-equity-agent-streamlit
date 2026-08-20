@@ -11,7 +11,7 @@ import logging
 from dataclasses import dataclass, field
 
 from joey_park.llm.base import LLMProvider
-from joey_park.llm.errors import describe_with_traceback as describe  # TEMP: full traceback for cloud-only bug diagnosis
+from joey_park.llm.errors import describe
 from joey_park.llm.json_utils import LLMJsonParseError, extract_json
 
 logger = logging.getLogger(__name__)
