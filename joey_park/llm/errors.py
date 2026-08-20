@@ -10,6 +10,8 @@ instead of the real error, which is why an earlier deploy's logs showed
 """
 from __future__ import annotations
 
+import traceback
+
 
 def unwrap(exc: BaseException) -> BaseException:
     """Returns the real underlying exception if `exc` is a tenacity
@@ -26,3 +28,14 @@ def unwrap(exc: BaseException) -> BaseException:
 def describe(exc: BaseException) -> str:
     real = unwrap(exc)
     return f"{type(real).__name__}: {real}"
+
+
+def describe_with_traceback(exc: BaseException) -> str:
+    """Temporary debugging helper — includes the full stack trace of the
+    unwrapped exception so a cloud-only failure can be pinpointed to an
+    exact file/line without needing a local reproduction. Remove once the
+    root cause is fixed (see docs/DECISION_LOG.md).
+    """
+    real = unwrap(exc)
+    tb = "".join(traceback.format_exception(type(real), real, real.__traceback__))
+    return f"{type(real).__name__}: {real}\n{tb}"
